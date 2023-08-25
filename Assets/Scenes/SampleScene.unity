@@ -238,6 +238,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blackSquare: {fileID: 3807658366409165510, guid: da0bf3e6c2c260a4187b7a7c1c544e5a, type: 3}
   whiteSquare: {fileID: 2819993488252330952, guid: 3987b6a555e6bb74481f4ccb73947704, type: 3}
+  greySquare: {fileID: 2819993488252330952, guid: bb67c2133e0a1fb489580ae81bcb65c6, type: 3}
+  startSquare: {fileID: 2819993488252330952, guid: 914bad62e0f7eec41870d802e29da72b, type: 3}
+  endSquare: {fileID: 2819993488252330952, guid: edae9b0807121a149b101b075f8c9ff3, type: 3}
 --- !u!4 &1171653558
 Transform:
   m_ObjectHideFlags: 0

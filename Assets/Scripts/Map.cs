@@ -2,20 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Testing : MonoBehaviour
+public class Map : MonoBehaviour
 {
     private Grid grid;
+    private bool solve = false;
 
     public GameObject blackSquare;
     public GameObject whiteSquare;
+    public GameObject greySquare;
+    public GameObject startSquare;
+    public GameObject endSquare;
+
     private void Start()
     {
         grid = new Grid();
         grid.blackSquare = blackSquare;
         grid.whiteSquare = whiteSquare;
-        grid.UpdateGrid(20, 20, 5f, new Vector3(-70, -75));
+        grid.greySquare = greySquare;
+        grid.startSquare = startSquare;
+        grid.endSquare = endSquare;
+        grid.UpdateGrid(10, 10, 5f, new Vector3(-70, -75));
 
-        //grid = new Grid(4, 2, 10f, new Vector3(-50, -50));
+
 
        
     }
@@ -24,18 +32,30 @@ public class Testing : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            grid.SetValue(GetMouseWorldPos(), 1);
+            grid.startPos = grid.SetValue(GetMouseWorldPos(), 3);
         }
 
         if (Input.GetMouseButtonDown(2))
         {
-            grid.SetValue(GetMouseWorldPos(), 0);
+            grid.SetValue(GetMouseWorldPos(), 1);
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log(grid.GetValue(GetMouseWorldPos()));
+            grid.endPos = grid.SetValue(GetMouseWorldPos(), 4);
         }
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            solve = true;
+        }
+
+        if(solve)
+        {
+            grid.geneticAlgorithm.Run();
+            grid.Solve();
+        }
+
     }
 
     private Vector3 GetMouseWorldPos()
