@@ -105,6 +105,7 @@ public class GeneticAlgorithm
 
 				if(genomes[i].fitness == 1)
                 {
+					Debug.Log("fitness 1");
 					busy = false;
 					return;
                 }

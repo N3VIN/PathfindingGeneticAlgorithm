@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -55,8 +56,10 @@ public class Grid : MonoBehaviour
 
         pathSquares = new List<GameObject>();
 
-        geneticAlgorithm = new GeneticAlgorithm();
-        geneticAlgorithm.grid = this;
+        geneticAlgorithm = new GeneticAlgorithm
+        {
+            grid = this
+        };
 
     }
 
@@ -222,14 +225,18 @@ public class Grid : MonoBehaviour
         if(geneticAlgorithm.busy)
         {
             geneticAlgorithm.Epoch();
-            DrawPath();
         }
+        DrawPath();
+
+        //int x, y;
+        //GetXY(pathSquares.Last().transform.position, out x, out y);
+        //Debug.Log("Generation: " + geneticAlgorithm.generation + " (" + x + "," + y + ")");
     }
 
     private void DrawPath()
     {
         ClearPath();
-        Debug.Log("path cleared");
+        //Debug.Log("path cleared");
         Genome bestGenome = geneticAlgorithm.genomes[geneticAlgorithm.fittestGenome];
         List<int> bestDirection = geneticAlgorithm.Decode(bestGenome.bits);
         Vector2 pos = startPos;
@@ -263,6 +270,11 @@ public class Grid : MonoBehaviour
 
         Vector2 absPos = new Vector2( Math.Abs(pos.x - endPos.x), Math.Abs(pos.y - endPos.y));
         double result = 1 / (double)(absPos.x + absPos.y + 1);
+
+        if (result == 1)
+        {
+            Debug.Log("TestRoute result=" + result + ",(" + pos.x + "," + pos.y + ")");
+        }
 
         return result;
     }

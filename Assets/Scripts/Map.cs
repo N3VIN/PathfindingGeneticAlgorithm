@@ -21,7 +21,7 @@ public class Map : MonoBehaviour
         grid.greySquare = greySquare;
         grid.startSquare = startSquare;
         grid.endSquare = endSquare;
-        grid.UpdateGrid(10, 10, 5f, new Vector3(-70, -75));
+        grid.UpdateGrid(20, 20, 5f, new Vector3(-70, -75));
 
 
 
@@ -33,26 +33,29 @@ public class Map : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             grid.startPos = grid.SetValue(GetMouseWorldPos(), 3);
+            Debug.Log(grid.startPos);
         }
 
         if (Input.GetMouseButtonDown(2))
         {
-            grid.SetValue(GetMouseWorldPos(), 1);
+            var temp = grid.SetValue(GetMouseWorldPos(), 1);
+            Debug.Log(temp);
         }
 
         if (Input.GetMouseButtonDown(1))
         {
             grid.endPos = grid.SetValue(GetMouseWorldPos(), 4);
+            Debug.Log(grid.endPos);
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             solve = true;
+            grid.geneticAlgorithm.Run();
         }
 
-        if(solve)
+        if (solve)
         {
-            grid.geneticAlgorithm.Run();
             grid.Solve();
         }
 
