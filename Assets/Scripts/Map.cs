@@ -18,14 +18,13 @@ public class Map : MonoBehaviour
 
     private void Start()
     {
-        //grid = new Grid();
         m_Grid = gameObject.AddComponent<Grid>();
         m_Grid.m_BlackSquare = m_BlackSquare;
         m_Grid.m_WhiteSquare = m_WhiteSquare;
         m_Grid.m_GreySquare = m_GreySquare;
         m_Grid.m_StartSquare = m_StartSquare;
         m_Grid.m_EndSquare = m_EndSquare;
-        m_Grid.UpdateGrid(20, 20, 5f, new Vector3(-70, -75));
+        m_Grid.UpdateGrid(20, 20, 5f, new Vector3(-70, -60));
 
         GeneticAlgorithm.m_sMutationRate = m_MutationRate;
         GeneticAlgorithm.m_sPopulationSize = m_PopulationSize;
