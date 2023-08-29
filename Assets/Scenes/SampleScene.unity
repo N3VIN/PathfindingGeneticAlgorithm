@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 1171653558}
   - component: {fileID: 1171653557}
   m_Layer: 0
-  m_Name: Testing'
+  m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,11 +236,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8aa5127c066894aaaab816c7d12203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blackSquare: {fileID: 3807658366409165510, guid: da0bf3e6c2c260a4187b7a7c1c544e5a, type: 3}
-  whiteSquare: {fileID: 2819993488252330952, guid: 3987b6a555e6bb74481f4ccb73947704, type: 3}
-  greySquare: {fileID: 2819993488252330952, guid: bb67c2133e0a1fb489580ae81bcb65c6, type: 3}
-  startSquare: {fileID: 2819993488252330952, guid: 914bad62e0f7eec41870d802e29da72b, type: 3}
-  endSquare: {fileID: 2819993488252330952, guid: edae9b0807121a149b101b075f8c9ff3, type: 3}
+  m_BlackSquare: {fileID: 3807658366409165510, guid: da0bf3e6c2c260a4187b7a7c1c544e5a, type: 3}
+  m_WhiteSquare: {fileID: 2819993488252330952, guid: 3987b6a555e6bb74481f4ccb73947704, type: 3}
+  m_GreySquare: {fileID: 2819993488252330952, guid: bb67c2133e0a1fb489580ae81bcb65c6, type: 3}
+  m_StartSquare: {fileID: 2819993488252330952, guid: 914bad62e0f7eec41870d802e29da72b, type: 3}
+  m_EndSquare: {fileID: 2819993488252330952, guid: edae9b0807121a149b101b075f8c9ff3, type: 3}
+  m_MutationRate: 0.01
+  m_PopulationSize: 560
+  m_ChromosomeLength: 280
 --- !u!4 &1171653558
 Transform:
   m_ObjectHideFlags: 0

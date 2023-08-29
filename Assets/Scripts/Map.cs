@@ -4,68 +4,69 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    private Grid grid;
-    private bool solve = false;
+    private Grid m_Grid;
+    private bool m_Solve = false;
 
-    public GameObject blackSquare;
-    public GameObject whiteSquare;
-    public GameObject greySquare;
-    public GameObject startSquare;
-    public GameObject endSquare;
+    public GameObject m_BlackSquare;
+    public GameObject m_WhiteSquare;
+    public GameObject m_GreySquare;
+    public GameObject m_StartSquare;
+    public GameObject m_EndSquare;
+    public double m_MutationRate = 0.01f;
+    public int m_PopulationSize = 560;
+    public int m_ChromosomeLength = 280;
 
     private void Start()
     {
-        grid = new Grid();
-        grid.blackSquare = blackSquare;
-        grid.whiteSquare = whiteSquare;
-        grid.greySquare = greySquare;
-        grid.startSquare = startSquare;
-        grid.endSquare = endSquare;
-        grid.UpdateGrid(20, 20, 5f, new Vector3(-70, -75));
+        //grid = new Grid();
+        m_Grid = gameObject.AddComponent<Grid>();
+        m_Grid.m_BlackSquare = m_BlackSquare;
+        m_Grid.m_WhiteSquare = m_WhiteSquare;
+        m_Grid.m_GreySquare = m_GreySquare;
+        m_Grid.m_StartSquare = m_StartSquare;
+        m_Grid.m_EndSquare = m_EndSquare;
+        m_Grid.UpdateGrid(20, 20, 5f, new Vector3(-70, -75));
 
-
-
-       
+        GeneticAlgorithm.m_sMutationRate = m_MutationRate;
+        GeneticAlgorithm.m_sPopulationSize = m_PopulationSize;
+        GeneticAlgorithm.m_sChromosomeLength = m_ChromosomeLength;     
     }
 
     private void Update()
     {
         if(Input.GetMouseButtonDown(0))
         {
-            grid.startPos = grid.SetValue(GetMouseWorldPos(), 3);
-            Debug.Log(grid.startPos);
+            m_Grid.m_StartPos = m_Grid.SetValue(GetMouseWorldPos(), 3);
         }
 
         if (Input.GetMouseButtonDown(2))
         {
-            var temp = grid.SetValue(GetMouseWorldPos(), 1);
-            Debug.Log(temp);
+            var temp = m_Grid.SetValue(GetMouseWorldPos(), 1);
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            grid.endPos = grid.SetValue(GetMouseWorldPos(), 4);
-            Debug.Log(grid.endPos);
+            m_Grid.m_EndPos = m_Grid.SetValue(GetMouseWorldPos(), 4);
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            solve = true;
-            grid.geneticAlgorithm.Run();
+            m_Solve = true;
+            m_Grid.m_GeneticAlgorithm.Run();
+
         }
 
-        if (solve)
+        if (m_Solve)
         {
-            grid.Solve();
+            m_Grid.Solve();
         }
 
     }
 
-    private Vector3 GetMouseWorldPos()
+    private Vector2 GetMouseWorldPos()
     {
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        worldPos.z = 0f;
-        return worldPos;
+        return new Vector2(worldPos.x, worldPos.y);
     }
 
 }

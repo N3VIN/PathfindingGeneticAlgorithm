@@ -5,24 +5,18 @@ using UnityEngine;
 
 public class Genome
 {
-    public List<int> bits;
-    public double fitness;
+    public List<int> m_Bits = new List<int>();
+    public double m_Fitness = 0 ;
 
     public Genome()
     {
-        fitness = 0;
-        bits = new List<int>();
     }
 
     public Genome(int numBits)
     {
-        fitness = 0;
-        bits = new List<int>();
-
         for(int i = 0; i < numBits; i++ )
         {
-            var randomNum = new System.Random(DateTime.Now.GetHashCode() * SystemInfo.processorFrequency.GetHashCode());
-            bits.Add(randomNum.Next(0, 2));
+            m_Bits.Add(UnityEngine.Random.Range(0, 2));
         }
     }
 

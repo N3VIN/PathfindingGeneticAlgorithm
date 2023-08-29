@@ -4,109 +4,94 @@ using UnityEngine;
 
 public class GeneticAlgorithm
 {
-    public List<Genome> genomes;
-    public List<Genome> prevGenGenomes;
-	public int populationSize = 140;
-	public double crossoverRate = 0.7f;
-	public double mutationRate = 0.001f;
-	public int chromosomeLength = 70;
-	public int geneLength = 2;
-	public int fittestGenome;
-	public double bestFitnessScore;
-	public double totalFitnessScore;
-	public int generation;
-	public bool busy;
-	public Grid grid;
+	public static int m_sPopulationSize = 560;
+	public static double m_sMutationRate = 0.01f;
+	public static int m_sChromosomeLength = 280;
 
-	public GeneticAlgorithm()
-	{
-		busy = false;
-		genomes = new List<Genome>();
-		prevGenGenomes = new List<Genome>();
-	}
+	public List<Genome> m_Genomes = new List<Genome>();
+	public int m_Generation;
+	public bool m_Busy = false;
+	public Grid m_Grid;
+
+	private double m_CrossoverRate = 0.7f;
+	private int m_GeneLength = 2;
+	public int m_FittestGenome;
+	private double m_BestFitnessScore;
+	private double m_TotalFitnessScore;
 
 	public void Run()
     {
 		CreateFirstPopulation();
-		busy = true;
+		m_Busy = true;
     }
 
-	public void CreateFirstPopulation()
+	private void CreateFirstPopulation()
     {
-		genomes.Clear();
+		m_Genomes.Clear();
 
-		for(int i = 0; i < populationSize; i++)
+		for(int i = 0; i < m_sPopulationSize; i++)
         {
-			var baby = new Genome(chromosomeLength);
-			genomes.Add(baby);
+			var baby = new Genome(m_sChromosomeLength);
+			m_Genomes.Add(baby);
         }
     }
 
 	public void Epoch()
     {
-		if(!busy)
-        {
+		if(!m_Busy)
 			return;
-        }
 
 		UpdateFitnessScores();
 
-		if(!busy)
-        {
-			prevGenGenomes.Clear();
-			prevGenGenomes.AddRange(genomes);
+		if (!m_Busy)
 			return;
-        }
 
 		int noOfNewBabies = 0;
 
 		List<Genome> babies = new List<Genome>();
-		while(noOfNewBabies < populationSize)
+		while(noOfNewBabies < m_sPopulationSize)
         {
 			Genome mom = RouletteWheelSelection();
 			Genome dad = RouletteWheelSelection();
 			Genome baby1 = new Genome();
 			Genome baby2 = new Genome();
-			Crossover(mom.bits, dad.bits, baby1.bits, baby2.bits);
-			Mutate(baby1.bits);
-			Mutate(baby2.bits);
+			Crossover(mom.m_Bits, dad.m_Bits, baby1.m_Bits, baby2.m_Bits);
+			Mutate(baby1.m_Bits);
+			Mutate(baby2.m_Bits);
 			babies.Add(baby1);
 			babies.Add(baby2);
 
 			noOfNewBabies += 2;
         }
 
-		prevGenGenomes.Clear();
-		prevGenGenomes.AddRange(genomes);
+		m_Genomes = babies;
 
-		genomes = babies;
-
-		generation++;
+		++m_Generation;
     }
 
-	public void UpdateFitnessScores()
+	private void UpdateFitnessScores()
     {
-		fittestGenome = 0;
-		bestFitnessScore = 0;
-		totalFitnessScore = 0;
+		m_FittestGenome = 0;
+		m_BestFitnessScore = 0;
+		m_TotalFitnessScore = 0;
 
-		for(int i = 0; i < populationSize; i++)
+		for(int i = 0; i < m_sPopulationSize; i++)
         {
-			List<int> directions = Decode(genomes[i].bits);
+			List<int> directions = Decode(m_Genomes[i].m_Bits);
 
-			genomes[i].fitness = grid.Fitness(directions); // complete this.
+			m_Genomes[i].m_Fitness = m_Grid.Fitness(directions);
 
-			totalFitnessScore += genomes[i].fitness;
+			m_TotalFitnessScore += m_Genomes[i].m_Fitness;
 
-			if(genomes[i].fitness > bestFitnessScore)
+			if(m_Genomes[i].m_Fitness > m_BestFitnessScore)
             {
-				bestFitnessScore = genomes[i].fitness;
-				fittestGenome = i;
+				m_BestFitnessScore = m_Genomes[i].m_Fitness;
+				m_FittestGenome = i;
 
-				if(genomes[i].fitness == 1)
+				if(m_Genomes[i].m_Fitness == 1)
                 {
-					Debug.Log("fitness 1");
-					busy = false;
+					Debug.Log("No of Generations: " + m_Generation);
+					m_Busy = false;
 					return;
                 }
             }
@@ -117,11 +102,11 @@ public class GeneticAlgorithm
     {
 		List<int> directions = new List<int>();
 
-		for(int i = 0; i < bits.Count; i+= geneLength) // i is the index of the gene.
+		for(int i = 0; i < bits.Count; i+= m_GeneLength) // i is the index of the gene.
         {
 			List<int> gene = new List<int>();
 
-			for(int j = 0; j < geneLength; j++) // j is the index of the bits.
+			for(int j = 0; j < m_GeneLength; j++) // j is the index of the bits.
             {
 				gene.Add(bits[i + j]);
             }
@@ -148,13 +133,13 @@ public class GeneticAlgorithm
 
 	private Genome RouletteWheelSelection()
     {
-		double slice = UnityEngine.Random.value * totalFitnessScore;
+		double slice = UnityEngine.Random.value * m_TotalFitnessScore;
 		double total = 0;
 		int selectedGenome = 0;
 
-		for(int i = 0; i < populationSize; i++)
+		for(int i = 0; i < m_sPopulationSize; i++)
         {
-			total += genomes[i].fitness;
+			total += m_Genomes[i].m_Fitness;
 
 			if (total > slice)
             {
@@ -163,12 +148,12 @@ public class GeneticAlgorithm
             }
         }
 
-		return genomes[selectedGenome];
+		return m_Genomes[selectedGenome];
     }
 
 	private void Crossover(List<int> mom, List<int> dad, List<int> baby1, List<int> baby2)
     {
-		if(UnityEngine.Random.value > crossoverRate || mom == dad)
+		if(UnityEngine.Random.value > m_CrossoverRate || mom == dad)
         {
 			baby1.AddRange(mom);
 			baby2.AddRange(mom);
@@ -176,9 +161,7 @@ public class GeneticAlgorithm
 			return;
         }
 
-		var random = new System.Random();
-
-		int crossoverPoint = random.Next(0, chromosomeLength - 1);
+		int crossoverPoint = Random.Range(0, m_sChromosomeLength - 1);
 
 		for(int i = 0; i < crossoverPoint; i++)
         {
@@ -197,9 +180,8 @@ public class GeneticAlgorithm
     {
 		for(int i = 0; i < bits.Count; i++)
         {
-			if(UnityEngine.Random.value < mutationRate)
+			if(UnityEngine.Random.value < m_sMutationRate)
             {
-				//bits[i] = bits[i] == 0 ? 1 : 0;
 				if (bits[i] == 0)
 				{
 					bits[i] = 1;
