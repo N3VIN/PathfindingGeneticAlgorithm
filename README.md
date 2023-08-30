@@ -227,6 +227,7 @@ Chromosome Length = 70
 Num of generations = 5 
 
 ![gif](https://i.gyazo.com/45308ccdfac0b7f7a80510022eaa7d6c.png)
+
 Mutation Rate = 0.01
 Population Size = 280
 Chromosome Length = 140
