@@ -13,7 +13,7 @@ A research project on Pathfinding using Genetic Algorithm.
 
 ## What is Genetic Algorithm?
 
-Genetic algorithm is a method used to solve problems of optimization by copying the process of natural selection. 
+Genetic Algorithm is a method used to solve problems of optimization by copying the process of natural selection. 
 Genetic Algorithm attempts to generating a solution by using some operations which we will discuss shortly.
 
 Genetic Algorithm don't guarantee a best solution. Over time, the Algorithm might converge to a solution.
