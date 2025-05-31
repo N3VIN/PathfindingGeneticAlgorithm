@@ -63,20 +63,20 @@ Fitness Function determines how fit the member of the population is. There is a 
 
 ```c#
 public double Fitness(List<int> directions)
-    {
-        Vector2 pos = m_StartPos;
+{
+    Vector2 pos = m_StartPos;
 
-        for(int idx = 0; idx < directions.Count; idx++)
-        {
-            var nextDirection = directions[idx];
-            pos = Move(pos, nextDirection);
-        }
+    for(int idx = 0; idx < directions.Count; idx++)
+	{
+		var nextDirection = directions[idx];
+		pos = Move(pos, nextDirection);
+	}
 
-        Vector2 absPos = new Vector2( Math.Abs(pos.x - m_EndPos.x), Math.Abs(pos.y - m_EndPos.y));
-        double result = 1 / (double)(absPos.x + absPos.y + 1);
+	Vector2 absPos = new Vector2( Math.Abs(pos.x - m_EndPos.x), Math.Abs(pos.y - m_EndPos.y));
+	double result = 1 / (double)(absPos.x + absPos.y + 1);
 
-        return result;
-    }
+	return result;
+}
 ```
 This Function returns a fitness score based on the member distance from the exit.
 The `absPos` holds the position of the member.
@@ -89,24 +89,24 @@ Roulette wheel Selection is a process of choosing the member from the population
 
 ```c#
 private Genome RouletteWheelSelection()
-    {
-		double slice = UnityEngine.Random.value * m_TotalFitnessScore;
-		double total = 0;
-		int selectedGenome = 0;
+{
+	double slice = UnityEngine.Random.value * m_TotalFitnessScore;
+	double total = 0;
+	int selectedGenome = 0;
 
-		for(int i = 0; i < m_sPopulationSize; i++)
-        {
-			total += m_Genomes[i].m_Fitness;
+	for(int i = 0; i < m_sPopulationSize; i++)
+	{
+		total += m_Genomes[i].m_Fitness;
 
-			if (total > slice)
-            {
-				selectedGenome = i;
-				break;
-            }
-        }
+		if (total > slice)
+		{
+			selectedGenome = i;
+			break;
+		}
+	}
 
-		return m_Genomes[selectedGenome];
-    }
+	return m_Genomes[selectedGenome];
+}
 ```
 This function returns a genome using a probability proportional to its fitness.
 The `slice` holds a random number from 0 to the total of all fitness score `m_TotalFitnessScore`.
@@ -121,29 +121,29 @@ It can be seen as the crossover that happens in sexual reproduction in biology.
 
 ```c#
 private void Crossover(List<int> mom, List<int> dad, List<int> baby1, List<int> baby2)
-    {
-		if(UnityEngine.Random.value > m_CrossoverRate || mom == dad)
-        {
-			baby1.AddRange(mom);
-			baby2.AddRange(mom);
+{
+	if(UnityEngine.Random.value > m_CrossoverRate || mom == dad)
+	{
+		baby1.AddRange(mom);
+		baby2.AddRange(mom);
 
-			return;
-        }
+		return;
+	}
 
-		int crossoverPoint = Random.Range(0, m_sChromosomeLength - 1);
+	int crossoverPoint = Random.Range(0, m_sChromosomeLength - 1);
 
-		for(int i = 0; i < crossoverPoint; i++)
-        {
-			baby1.Add(mom[i]);
-			baby2.Add(dad[i]);
-        }
+	for(int i = 0; i < crossoverPoint; i++)
+	{
+		baby1.Add(mom[i]);
+		baby2.Add(dad[i]);
+	}
 
-		for(int i = crossoverPoint; i < mom.Count; i++)
-        {
-			baby1.Add(dad[i]);
-			baby2.Add(mom[i]);
-		}
-    }
+	for(int i = crossoverPoint; i < mom.Count; i++)
+	{
+		baby1.Add(dad[i]);
+		baby2.Add(mom[i]);
+	}
+}
 ```
 This function splits the chromosomes and swaps the bits to create 2 new chromosomes.
 `crossoverPoint` is a random point chosen to split the chromosomes.
@@ -155,22 +155,22 @@ Mutation is a process of arranging the genes in the chromosome to produce a tota
 
 ```c#
 private void Mutate(List<int> bits)
-    {
-		for(int i = 0; i < bits.Count; i++)
-        {
-			if(UnityEngine.Random.value < m_sMutationRate)
-            {
-				if (bits[i] == 0)
-				{
-					bits[i] = 1;
-				}
-				else
-                {
-					bits[i] = 0;
-                }
+{
+	for(int i = 0; i < bits.Count; i++)
+	{
+		if(UnityEngine.Random.value < m_sMutationRate)
+		{
+			if (bits[i] == 0)
+			{
+				bits[i] = 1;
 			}
-        }
-    }
+			else
+			{
+				bits[i] = 0;
+			}
+		}
+	}
+}
 ```
 This function goes through the chromosome and flips the bits according to the `m_sMutationRate`.
 
@@ -178,37 +178,37 @@ This function goes through the chromosome and flips the bits according to the `m
 
 ```c#
 public void Epoch()
-    {
-		if(!m_Busy)
-			return;
+{
+	if(!m_Busy)
+	return;
 
-		UpdateFitnessScores();
+	UpdateFitnessScores();
 
-		if (!m_Busy)
-			return;
+	if (!m_Busy)
+	return;
 
-		int noOfNewBabies = 0;
+	int noOfNewBabies = 0;
 
-		List<Genome> babies = new List<Genome>();
-		while(noOfNewBabies < m_sPopulationSize)
-        {
-			Genome mom = RouletteWheelSelection();
-			Genome dad = RouletteWheelSelection();
-			Genome baby1 = new Genome();
-			Genome baby2 = new Genome();
-			Crossover(mom.m_Bits, dad.m_Bits, baby1.m_Bits, baby2.m_Bits);
-			Mutate(baby1.m_Bits);
-			Mutate(baby2.m_Bits);
-			babies.Add(baby1);
-			babies.Add(baby2);
+	List<Genome> babies = new List<Genome>();
+	while(noOfNewBabies < m_sPopulationSize)
+	{
+		Genome mom = RouletteWheelSelection();
+		Genome dad = RouletteWheelSelection();
+		Genome baby1 = new Genome();
+		Genome baby2 = new Genome();
+		Crossover(mom.m_Bits, dad.m_Bits, baby1.m_Bits, baby2.m_Bits);
+		Mutate(baby1.m_Bits);
+		Mutate(baby2.m_Bits);
+		babies.Add(baby1);
+		babies.Add(baby2);
 
-			noOfNewBabies += 2;
-        }
+		noOfNewBabies += 2;
+	}
 
-		m_Genomes = babies;
+	m_Genomes = babies;
 
-		++m_Generation;
-    }
+	++m_Generation;
+}
 ```
 
 This function is the main loop for the genetic algorithm.
